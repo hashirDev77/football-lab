@@ -1,0 +1,18 @@
+{
+  "name": "football-product",
+  "private": true,
+  "description": "Football Product Experience & API Gap Lab",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @football/api --filter @football/web dev",
+    "dev:api": "pnpm --filter @football/api dev",
+    "dev:web": "pnpm --filter @football/web dev",
+    "audit:phase1": "pnpm --filter @football/api audit:phase1",
+    "report": "pnpm --filter @football/api exec tsx src/audit/writeReport.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}

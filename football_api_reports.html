@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Football API Report — SportsAPI365</title>
+  <style>
+:root {
+  --ink: #1b2430;
+  --muted: #5b6570;
+  --line: #d8dee6;
+  --paper: #ffffff;
+  --band: #f4f7fa;
+  --accent: #0f4c5c;
+  --accent-soft: #e8f2f4;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 11pt/1.55 "Iowan Old Style", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+.page { max-width: 920px; margin: 0 auto; padding: 0; }
+h1 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 26pt;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  margin: 0 0 6pt;
+  line-height: 1.15;
+}
+h2 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 14.5pt;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 28pt 0 10pt;
+  padding-bottom: 5pt;
+  border-bottom: 1.5pt solid var(--accent);
+  page-break-after: avoid;
+}
+h3 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 12pt;
+  font-weight: 650;
+  color: #16333c;
+  margin: 18pt 0 8pt;
+  page-break-after: avoid;
+}
+p { margin: 0 0 10pt; }
+strong { font-weight: 700; }
+a { color: var(--accent); text-decoration: none; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 18pt 0; }
+.meta {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 9.5pt;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0 0 16pt;
+  padding: 12pt 14pt;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+}
+.meta p { margin: 0 0 3pt; white-space: pre-line; }
+.meta p:last-child { margin: 0; }
+.meta strong { color: var(--ink); font-weight: 650; }
+code, pre {
+  font-family: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+code {
+  font-size: 8.6pt;
+  background: #eef2f5;
+  padding: 1px 4px;
+  border-radius: 3px;
+  word-break: break-word;
+}
+pre {
+  background: #152028;
+  color: #e8eef2;
+  font-size: 8.5pt;
+  line-height: 1.45;
+  padding: 12pt 14pt;
+  border-radius: 6px;
+  overflow-x: hidden;
+  white-space: pre-wrap;
+  word-break: break-word;
+  page-break-inside: avoid;
+}
+pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+blockquote {
+  margin: 10pt 0 14pt;
+  padding: 8pt 12pt;
+  border-left: 3px solid var(--accent);
+  background: var(--band);
+  color: #24303a;
+}
+ul, ol { margin: 0 0 12pt; padding-left: 22pt; }
+li { margin: 0 0 4pt; }
+li > p { margin: 0 0 4pt; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8pt 0 16pt;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 8pt;
+  line-height: 1.35;
+}
+thead { display: table-header-group; }
+tr { page-break-inside: avoid; }
+th {
+  text-align: left;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 650;
+  padding: 5pt 5pt;
+  border: 1px solid #0c3d4a;
+  vertical-align: top;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+td {
+  padding: 4.5pt 5pt;
+  border: 1px solid var(--line);
+  vertical-align: top;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+td code { font-size: 7.2pt; }
+tbody tr:nth-child(even) td { background: var(--band); }
+.cols-2 td:nth-child(1), .cols-2 th:nth-child(1) { width: 28%; }
+.cols-3 td:nth-child(1), .cols-3 th:nth-child(1) { width: 32%; }
+.cols-4 { font-size: 7.6pt; }
+.cols-4 td:nth-child(1), .cols-4 th:nth-child(1) { width: 16%; }
+.cols-4 td:nth-child(2), .cols-4 th:nth-child(2) { width: 18%; }
+.cols-6 { font-size: 7.2pt; table-layout: fixed; }
+.cols-7 { font-size: 6.9pt; table-layout: fixed; }
+.cols-7 td:nth-child(1), .cols-7 th:nth-child(1) { width: 18%; }
+.cols-7 td:nth-child(2), .cols-7 th:nth-child(2) { width: 11%; }
+.cols-7 td:nth-child(3), .cols-7 th:nth-child(3) { width: 10%; }
+.cols-7 td:nth-child(4), .cols-7 th:nth-child(4) { width: 12%; }
+.cols-7 td:nth-child(5), .cols-7 th:nth-child(5) { width: 13%; }
+.cols-7 td:nth-child(6), .cols-7 th:nth-child(6) { width: 18%; }
+.cols-7 td:nth-child(7), .cols-7 th:nth-child(7) { width: 18%; }
+.toc {
+  background: var(--band);
+  border: 1px solid var(--line);
+  padding: 12pt 18pt 8pt;
+  margin: 0 0 22pt;
+  page-break-inside: avoid;
+}
+.toc:before {
+  content: "Contents";
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8pt;
+}
+.toc ul { margin: 0; padding-left: 18pt; }
+.toc li { margin: 0 0 3pt; font-size: 10pt; }
+.toc a { color: var(--ink); }
+.cover-kicker {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 8.5pt;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin: 0 0 8pt;
+}
+.footer-note {
+  margin-top: 28pt;
+  padding-top: 10pt;
+  border-top: 1px solid var(--line);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 8.5pt;
+  color: var(--muted);
+}
+@page {
+  size: A4;
+  margin: 14mm 10mm 16mm 10mm;
+}
+@media print {
+  body { font-size: 10.5pt; }
+  a { color: inherit; }
+  .page { max-width: none; }
+}
+</style>
+</head>
+<body>
+  <article class="page">
+    <div class="cover-kicker">SportsAPI365 · Football REST catalogue</div>
+    <h1 id="football-api-report">Football API Report</h1>
+    <div class="meta"><p><strong>API:</strong> <code>https://sports-api.sportsdata365.com/msdata/v1/football/</code><br />
+<strong>Product:</strong> Football Lab — a football app built on the SportsAPI365 Football REST catalogue (43 endpoints)<br />
+<strong>Scope:</strong> REST GET only. No streaming, alerts, predictions, or third-party score comparison.</p></div>
+    <nav class="toc"><ul><li><a href="#1-what-we-built">1. What we built</a></li><li><a href="#2-issues-we-found-while-building-the-product">2. Issues we found while building the product</a></li><li><a href="#3-how-we-tested">3. How we tested</a></li><li><a href="#4-pagination">4. Pagination</a></li><li><a href="#5-errors">5. Errors</a></li><li><a href="#6-catalogue-results">6. Catalogue results</a></li><li><a href="#7-what-a-football-product-can-ship-today">7. What a football product can ship today</a></li><li><a href="#8-what-is-missing-and-what-to-improve">8. What is missing, and what to improve</a></li></ul></nav>
+    <p>This is the combined record of two pieces of work. First we built a real football product on the 43-route catalogue and walked every screen. Then we called every endpoint properly — pagination, errors, missing fields, coverage — and asked whether the payload can actually feed those screens.</p>
+<p>The question throughout:</p>
+<blockquote>
+<p>Can someone ship a complete football product using only these 43 endpoints?</p>
+</blockquote>
+<p><strong>Short answer:</strong> yes for a first product, no for a complete match-centre experience without extra work. Search, teams, competitions, standings, match detail, incidents, and statistics work. Live home scores, lineups, injuries, weather, head-to-head, manager pages, and several match extras do not yet behave like a product API. Coverage also changes by match: the same path can be a full XI on one game and an empty shell or a 404 on another.</p>
+<p>Nothing below was invented. Search and directories returned the ids. The product only rendered what the API gave us.</p>
+<hr />
+<h2 id="1-what-we-built">1. What we built</h2>
+<p>Football Lab is a small football product a customer could reasonably expect from a sports data API:</p>
+<p><strong>Home</strong> (live / today / upcoming / finished) → <strong>Matches</strong> → <strong>Match centre</strong> → <strong>Team</strong> → <strong>Player</strong> → <strong>Competition</strong> → <strong>Search</strong></p>
+<p>It is not a production consumer app. It is the proof that the Football API can, or cannot, support those screens without extra work.</p>
+<p>The stack is a Fastify BFF (<code>apps/api</code>) and a Vite + React UI (<code>apps/web</code>). Every product screen talks to our BFF (<code>/app/football/...</code>). The BFF talks to SportsAPI365, normalises the payload, and records a gap whenever a field, relationship, or filter the screen needs is missing, empty, 404, slow, or shaped differently from another route. The UI is thin: it never calls the provider directly.</p>
+<p>That split was deliberate. List routes and detail routes do not share one schema. Search and today’s fixtures use <code>items</code>. Player and team match lists use <code>events</code>. Squad uses <code>players</code>. Player match stats use <code>playerStatistics</code>. Seasons use <code>seasons</code>. Status is a string on lists and an object on detail. Kickoff is unix seconds on lists. A UI that consumed the raw feed would have to special-case every screen. The BFF does that once, and records the special case as a gap.</p>
+<p>The app runs locally as two processes:</p>
+<ul>
+<li>Web UI: <code>http://127.0.0.1:5174</code></li>
+<li>BFF: <code>http://127.0.0.1:8788</code></li>
+</ul>
+<p>Admin tools sit at <code>/admin/gaps</code>, <code>/admin/coverage</code>, <code>/admin/endpoint-lab</code>, and <code>/admin/report</code>.</p>
+<p>Screen loaders were written against a product contract, not against “HTTP 200.” A live home card is expected to have teams, status, kickoff, score, and competition. A lineup tab is expected to have 11 starters, player ids, positions, shirts, and a formation. When the provider does not meet the contract, the loader still tries to render the screen: it may call <code>/event/{id}</code> for each live row that has no score, it may hide a tab on a 404, and it may show “data unavailable” when an envelope is empty. Those workarounds keep the product usable. They are also the evidence that the API is not yet product-complete.</p>
+<p>The UI never invents a 0–0, an empty injury list, or a fake XI.</p>
+<h3 id="pages">Pages</h3>
+<table class="cols-4">
+<thead>
+<tr>
+<th>Screen</th>
+<th>Route</th>
+<th>Job</th>
+<th>Endpoints it depends on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Home</td>
+<td><code>/</code></td>
+<td>What is happening in football right now</td>
+<td><code>/fixtures/today</code>, <code>/events</code>, <code>/tournaments</code></td>
+</tr>
+<tr>
+<td>Matches</td>
+<td><code>/matches</code></td>
+<td>Browse live / today / upcoming / results</td>
+<td><code>/events</code>, <code>/fixtures/today</code></td>
+</tr>
+<tr>
+<td>Match centre</td>
+<td><code>/match/:id</code></td>
+<td>Header + tabs (overview, timeline, lineups, stats, …)</td>
+<td><code>/event/{eventId}</code> and the 13 event extras</td>
+</tr>
+<tr>
+<td>Teams</td>
+<td><code>/teams</code>, <code>/team/:id</code></td>
+<td>Find a club, squad, matches, form</td>
+<td><code>/teams</code> and the 13 team routes</td>
+</tr>
+<tr>
+<td>Players</td>
+<td><code>/players</code>, <code>/player/:id</code></td>
+<td>Directory and profile</td>
+<td><code>/players</code>, <code>/player/{playerId}</code>, player events, season stats</td>
+</tr>
+<tr>
+<td>Manager</td>
+<td><code>/manager/:id</code></td>
+<td>Staff profile</td>
+<td><code>/manager/{managerId}</code></td>
+</tr>
+<tr>
+<td>Competitions</td>
+<td><code>/competitions</code>, <code>/competition/:id</code></td>
+<td>Directory, fixtures, table</td>
+<td><code>/tournaments</code> and the 6 unique-tournament routes</td>
+</tr>
+<tr>
+<td>Search</td>
+<td><code>/search</code></td>
+<td>Find a club, player, or league by name</td>
+<td><code>/search</code></td>
+</tr>
+<tr>
+<td>Admin</td>
+<td><code>/admin/gaps</code>, <code>/coverage</code>, <code>/endpoint-lab</code>, <code>/report</code></td>
+<td>Gap dashboard and catalogue lab</td>
+<td>same 43 routes, via the BFF</td>
+</tr>
+</tbody>
+</table>
+<p>Home, when we first walked it, loaded live matches, today’s list, upcoming kickoffs, finished games, and featured competitions. That one screen needed <strong>6 provider calls</strong> (3 of them fallbacks) and recorded <strong>60 gaps</strong>. That is the product working, and the API telling us what is missing.</p>
+<hr />
+<h2 id="2-issues-we-found-while-building-the-product">2. Issues we found while building the product</h2>
+<p>These showed up on real screens, not only in a catalogue sweep. A 200 was not enough. If the screen still needed a fallback, a hidden tab, or a guess, we recorded it.</p>
+<h3 id="home-cannot-be-a-live-scoreboard-from-the-list">Home cannot be a live scoreboard from the list</h3>
+<p><code>/fixtures/today</code> and <code>/events</code> return teams, status, and kickoff, but <strong>list rows often have no score</strong>. Home had to call <code>/event/{id}</code> for each live card. That is an N+1 pattern on the first screen a user opens.</p>
+<p><code>status</code> is a <strong>string</strong> on lists and an <strong>object</strong> on detail. <code>startTimestamp</code> is unix seconds on lists. Featured competitions from <code>/tournaments</code> are usable, but country/region on the card was often missing, and the call was slow enough that it should not sit on the critical home path.</p>
+<p><strong>Product impact:</strong> Home looks like a football app. A live scoreboard cannot be built from the day’s fixture list alone.</p>
+<h3 id="match-competition-navigation-breaks">Match → Competition navigation breaks</h3>
+<p>Match detail loads. Tournament <strong>name</strong> can appear while <code>uniqueTournament.id</code> is <strong>null</strong>. The match centre cannot open the competition page unless the UI cached the id from an earlier list. That is a broken relationship, not a missing widget.</p>
+<h3 id="match-centre-tabs-are-coverage-dependent">Match centre tabs are coverage-dependent</h3>
+<p>The match centre is the largest page (14 event routes). What we saw while wiring tabs:</p>
+<ul>
+<li><strong>Incidents</strong> and <strong>statistics</strong> were strong on covered matches. Timeline is one of the best routes in the catalogue.</li>
+<li><strong>Lineups</strong> were often an empty <code>{ home, away }</code> shell on the match Home had opened. You cannot draw a starting XI from that. A later catalogue pass found a real XI on a different, well-covered finished match. Formation and manager id were still missing.</li>
+<li><strong>Injuries</strong>, <strong>weather</strong>, <strong>pregame form</strong>, and <strong>H2H</strong> came back as tiny 200 envelopes. Empty is not “no injuries,” “no weather,” or “no previous meetings.”</li>
+<li><strong>Best players</strong>, <strong>team streaks</strong>, and <strong>typed enrichments</strong> 404’d on the match the product opened first. The same paths returned data on a covered finished match. A 404 here looks like “match not found” unless the client special-cases the message.</li>
+<li><strong>Player-in-match stats</strong> 404 when that player is not in the XI. Same overload: it reads as if the match is missing.</li>
+<li>Match <strong>enrichments</strong> <code>types</code> was empty on some matches and populated on others. Do not assume odds, news, or predictions live there.</li>
+</ul>
+<p><strong>Product impact:</strong> You can open a match, show teams, score (after detail), incidents, and statistics. You cannot ship a broadcast-quality match centre without hiding half the tabs, or without knowing which matches are “covered.”</p>
+<h3 id="team-pages-are-the-strongest-family">Team pages are the strongest family</h3>
+<p>Squad, previous/next matches, media, competitions, and standings-seasons are shippable. The squad payload is large enough to group GK / DF / MF / FW if <code>position</code> is populated.</p>
+<p>Issues that still showed up in the product:</p>
+<ul>
+<li>Team profile has <strong>no logo</strong>; crests live on <code>/media</code>.</li>
+<li><strong>Featured-event</strong> returns a match but does not mean “currently live.” <code>/near-events</code> is the better “what’s next” API.</li>
+<li>Rankings and performance need a documented <strong>scope</strong> (which competition, which window).</li>
+<li>Team season statistics <strong>404</strong> if you pair a team with a tournament/season it does not play. When the triple actually matches, the route works.</li>
+</ul>
+<h3 id="player-pages-are-thin-manager-is-a-dead-end">Player pages are thin; manager is a dead end</h3>
+<p>You can open a player and see recent matches. Country, date of birth, photo, height, and shirt number are not guaranteed. Season statistics 404 even when the player, league, and season look related. The client has to guess the tournament + season triple.</p>
+<p>Lineups and match detail did not emit a manager id we could resolve. <code>/manager/{id}</code> 404s without one. The manager screen is not shippable.</p>
+<h3 id="search-finds-real-names-not-typos">Search finds real names, not typos</h3>
+<p>Exact and partial club / player / competition names resolve. A misspelling does not. Hits need <code>type</code>, <code>id</code>, and <code>name</code>. Duplicate rows should be unique.</p>
+<h3 id="schema-and-list-key-drift-every-screen-paid-for-this">Schema and list-key drift (every screen paid for this)</h3>
+<p>The BFF exists because the catalogue does not unwrap the same way twice:</p>
+<table class="cols-2">
+<thead>
+<tr>
+<th>Feed</th>
+<th>List key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Search, today, <code>/events</code>, directories</td>
+<td><code>items</code></td>
+</tr>
+<tr>
+<td>Team / player / competition matches</td>
+<td><code>events</code></td>
+</tr>
+<tr>
+<td>Squad</td>
+<td><code>players</code></td>
+</tr>
+<tr>
+<td>Match timeline</td>
+<td><code>incidents</code></td>
+</tr>
+<tr>
+<td>Player match stats</td>
+<td><code>playerStatistics</code></td>
+</tr>
+<tr>
+<td>Seasons</td>
+<td><code>seasons</code></td>
+</tr>
+<tr>
+<td>Standings</td>
+<td><code>standings</code> (groups, not a page of rows)</td>
+</tr>
+</tbody>
+</table>
+<p>A client that only reads <code>items</code> will silently drop squad, timeline, and player stats.</p>
+<hr />
+<h2 id="3-how-we-tested">3. How we tested</h2>
+<p>Testing was done in layers. Together they are the basis of this report.</p>
+<ol>
+<li><strong>Product walk.</strong> We built the screens, opened Home → match → team → player → competition → search, and recorded a gap whenever a widget was empty, hidden, or assembled from extra calls.</li>
+<li><strong>Catalogue sweep.</strong> Every one of the 43 routes was called with real ids from search and directories — not invented ids.</li>
+<li><strong>Depth pass.</strong> Pagination (page 1 vs page 2 vs a huge page), status filters (<code>notstarted</code> / <code>inprogress</code> / <code>finished</code>), <code>last</code> / <code>next</code>, standings <code>total</code> / <code>home</code> / <code>away</code>, and error cases (missing <code>q</code>, non-numeric id, unknown id, bad date, invalid direction, invalid standings type).</li>
+<li><strong>Coverage pass.</strong> The same match extra was tried on several matches. That is how we learned lineups / best-players / streaks are not “broken” on every match and not “working” on every match either.</li>
+</ol>
+<p>We did not treat HTTP 200 as a pass. A 200 with an empty envelope is <strong>Empty</strong>. A 404 on an optional extra is <strong>Not available</strong>, not “match missing.”</p>
+<table class="cols-2">
+<thead>
+<tr>
+<th>Result</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Works</strong></td>
+<td>200 with data a screen can show</td>
+</tr>
+<tr>
+<td><strong>Partial</strong></td>
+<td>200, but the screen still needs extra calls, hiding, or guessing</td>
+</tr>
+<tr>
+<td><strong>Empty</strong></td>
+<td>200 with nothing useful. Not the same as “no injuries” or “no weather”</td>
+</tr>
+<tr>
+<td><strong>Not available</strong></td>
+<td>404 on an optional extra. The parent match / player / team still exists</td>
+</tr>
+<tr>
+<td><strong>Expected</strong></td>
+<td>400 or 404 on a bad request (missing query, non-numeric id, bad date, bad enum)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-pagination">4. Pagination</h2>
+<p>List routes use <strong>1-based <code>page</code></strong> and <code>limit</code>, and usually return the list plus <code>total</code>, <code>totalPages</code>, and <code>hasMore</code>.</p>
+<p>What we confirmed:</p>
+<ul>
+<li>Page 2 returns a <strong>different slice</strong>, not a repeat of page 1, on <code>/events</code>, <code>/fixtures/today</code>, <code>/teams</code>, <code>/players</code>, <code>/tournaments</code>, team matches, player matches, competition matches, seasons, and team media.</li>
+<li>A huge page number returns <strong>200 with an empty list</strong>, not 404. That is the right behaviour.</li>
+<li>Search needs <code>q</code> of <strong>2–80 characters</strong> (letters, numbers, spaces, <code>'</code>, <code>.</code>, <code>-</code>). A one-character query is rejected. An out-of-range search page is empty 200.</li>
+<li>Squad (<code>/team/{id}/players</code>), match enrichments, and standings groups are <strong>not paginated</strong> even when the payload is large. Squad is a single dump.</li>
+<li>Match <strong>incidents</strong> and <strong>player-statistics</strong> are paginated. A timeline or player-stats tab that only reads page 1 will be incomplete. Default page size on incidents is small.</li>
+</ul>
+<p><code>direction</code> on match lists is <code>last</code> or <code>next</code>. Anything else is 400.</p>
+<p><code>standings/{type}</code> is <code>total</code>, <code>home</code>, or <code>away</code>. Anything else is 400.</p>
+<hr />
+<h2 id="5-errors">5. Errors</h2>
+<p>These are reliable and should be handled as client mistakes or missing extras, not as “the feed is down.”</p>
+<table class="cols-3">
+<thead>
+<tr>
+<th>Situation</th>
+<th>HTTP</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Search with no <code>q</code></td>
+<td>400</td>
+<td>Validation message about allowed characters and length. It does not simply say “q is required.”</td>
+</tr>
+<tr>
+<td>Non-numeric id (<code>/event/abc</code>)</td>
+<td>400</td>
+<td>Numeric string expected</td>
+</tr>
+<tr>
+<td>Unknown match / team / player id</td>
+<td>404</td>
+<td>Named “was not found”</td>
+</tr>
+<tr>
+<td>Invalid calendar date</td>
+<td>400</td>
+<td>Expected <code>YYYY-MM-DD</code></td>
+</tr>
+<tr>
+<td>Invalid <code>direction</code></td>
+<td>400</td>
+<td>Enum expected</td>
+</tr>
+<tr>
+<td>Invalid standings type</td>
+<td>400</td>
+<td>Enum expected</td>
+</tr>
+<tr>
+<td>Optional extra not on file (best players, streaks, season stats, player-in-match stats)</td>
+<td>404</td>
+<td>Looks like the parent entity is missing unless the client special-cases the message</td>
+</tr>
+<tr>
+<td>Empty extras (weather, h2h, lineups on an uncovered match)</td>
+<td>200</td>
+<td>Tiny envelope. Easy to misread as “no weather” or “no injuries”</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Improvement:</strong> optional extras should return <strong>200 empty</strong> with a reason (<code>unsupported</code>, <code>not_in_match</code>, <code>no_coverage</code>). Reserve 404 for “this match / player / team does not exist.”</p>
+<hr />
+<h2 id="6-catalogue-results">6. Catalogue results</h2>
+<p>Paths are relative to <code>/v1/football</code>. Every route below was called. Match extras are <strong>state and coverage dependent</strong>: on a finished, well-covered match, lineups, incidents, statistics, best players, and streaks all loaded. On other matches the same paths were an empty shell or a 404.</p>
+<h3 id="lists-and-search">Lists and search</h3>
+<table class="cols-7">
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Data type</th>
+<th>Result</th>
+<th>Pagination</th>
+<th>Proper data?</th>
+<th>Missing / issues</th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/search</code></td>
+<td>Paginated hit list (<code>items</code>)</td>
+<td><strong>Works</strong></td>
+<td>Yes. <code>q</code> required, 2–80 chars. Out-of-range page → empty 200</td>
+<td>Yes for real names (club, player, competition). Hits carry id / name / type</td>
+<td>Misspellings do not resolve. Duplicate hits possible</td>
+<td>Fuzzy / alias search. Keep <code>type</code> on every row</td>
+</tr>
+<tr>
+<td><code>/events</code></td>
+<td>Paginated match list (<code>items</code>)</td>
+<td><strong>Partial</strong></td>
+<td>Yes. <code>status</code> = <code>notstarted</code> | <code>inprogress</code> | <code>finished</code> all return data. Page 2 is a new slice</td>
+<td>Teams, status, kickoff. Live / finished / upcoming filters work</td>
+<td><strong>Score is often missing on the row.</strong> Status is a string here, an object on detail</td>
+<td>Put score, minute, and competition on every list row. One status object everywhere</td>
+</tr>
+<tr>
+<td><code>/fixtures/today</code></td>
+<td>Paginated match list (<code>items</code>)</td>
+<td><strong>Partial</strong></td>
+<td>Yes. Page 2 does not overlap page 1</td>
+<td>Today’s card works as a schedule</td>
+<td>Same missing score. Home cannot be a live scoreboard without N+1 <code>/event/{id}</code></td>
+<td>Same as <code>/events</code> — scores on the list</td>
+</tr>
+<tr>
+<td><code>/players</code></td>
+<td>Paginated directory (<code>items</code>)</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Name + id at directory scale</td>
+<td>Cards are thin (no photo, team, or position)</td>
+<td>Add photo, current team, position</td>
+</tr>
+<tr>
+<td><code>/teams</code></td>
+<td>Paginated directory (<code>items</code>)</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Name + id</td>
+<td>No crest / country on the card</td>
+<td>Add logo and country</td>
+</tr>
+<tr>
+<td><code>/tournaments</code></td>
+<td>Paginated directory (<code>items</code>)</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Competition names</td>
+<td>Region / country often missing</td>
+<td>Add category, country, logo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="match-centre">Match centre</h3>
+<table class="cols-7">
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Data type</th>
+<th>Result</th>
+<th>Pagination</th>
+<th>Proper data?</th>
+<th>Missing / issues</th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/event/{eventId}</code></td>
+<td>Match object (<code>event</code>)</td>
+<td><strong>Works</strong> / <strong>Partial</strong> in the product</td>
+<td>No</td>
+<td>Header is usable: teams, status object, score, tournament</td>
+<td>Tournament <strong>name</strong> can appear while tournament <strong>id</strong> is null, which breaks Match → Competition</td>
+<td>Always emit <code>uniqueTournament.id</code> with the name. ISO kickoff on list and detail</td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/best-players</code></td>
+<td>Best player + leaderboard</td>
+<td><strong>Works</strong> when covered; <strong>Not available</strong> (404) otherwise</td>
+<td>Leaderboard is paged</td>
+<td>Home / away best player and a ranking list on a covered finished match</td>
+<td>Ranking rule is not documented. 404 on uncovered matches</td>
+<td>200 empty when not covered. Document what “best” means</td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/enrichments</code></td>
+<td>Type list (<code>types</code>)</td>
+<td><strong>Works</strong> when covered; <strong>Empty</strong> otherwise</td>
+<td>Not paged</td>
+<td>Covered matches list extras (average positions, best players, highlights, shotmap, streaks, votes, …)</td>
+<td>Empty <code>types</code> on other matches looks like “no extras exist in the product”</td>
+<td>Publish the type catalogue. Empty list = no extras <strong>on this match</strong></td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/enrichments/{type}</code></td>
+<td>Typed extra (shape depends on type)</td>
+<td><strong>Works</strong> when the type exists; <strong>Not available</strong> (404) otherwise</td>
+<td>Depends on type</td>
+<td>First listed type returned a real payload on a covered match</td>
+<td>404 if you guess a type that is not on this match</td>
+<td>200 empty for unknown / unsupported type</td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/h2h</code></td>
+<td>Head-to-head object</td>
+<td><strong>Empty</strong></td>
+<td>No</td>
+<td>Keys exist (<code>teamDuel</code>, <code>managerDuel</code>)</td>
+<td>No previous-meetings list, no event ids to open</td>
+<td>Return historical matches with <code>eventId</code>, or a documented empty object</td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/incidents</code></td>
+<td>Paginated timeline (<code>incidents</code>)</td>
+<td><strong>Works</strong></td>
+<td>Yes — page 1 is not the full match</td>
+<td>Goals, cards, substitutions on a covered match</td>
+<td>Player / team id is not always obvious next to the name. Page size is small</td>
+<td>Guarantee <code>playerId</code> and <code>teamId</code>. Default a larger page or cursor</td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/injuries</code></td>
+<td>Home / away envelope</td>
+<td><strong>Partial</strong></td>
+<td>No</td>
+<td>Covered match returns a non-empty envelope</td>
+<td>Empty envelope on other matches. Empty is <strong>not</strong> “nobody is injured”</td>
+<td><code>{ coverage, home, away }</code>. Never imply a clean bill of health</td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/lineups</code></td>
+<td>Home / away envelope</td>
+<td><strong>Partial</strong></td>
+<td>No</td>
+<td>Covered finished match returns a real XI</td>
+<td>Formation and manager id often missing. Uncovered / not-started matches return an empty home/away shell</td>
+<td>11 starters, bench, shirts, positions, formation, coach, confirmed vs expected. Empty shell needs a coverage flag</td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/player-statistics</code></td>
+<td>Paginated player stats</td>
+<td><strong>Works</strong> when covered; <strong>Empty</strong> otherwise</td>
+<td>Yes</td>
+<td>Per-player match figures on a covered match</td>
+<td>List key is <code>playerStatistics</code>, not <code>items</code>. Easy to miss if the client only unwraps <code>items</code></td>
+<td>Keep one list key across the catalogue, or document this key</td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/player/{playerId}/statistics</code></td>
+<td>Player match stats</td>
+<td><strong>Not available</strong> if that player is not in the match</td>
+<td>No</td>
+<td>—</td>
+<td>404 reads as “match missing”</td>
+<td>200 <code>{ available: false, reason: "player_not_in_match" }</code></td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/pregame-form</code></td>
+<td>Home / away form</td>
+<td><strong>Works</strong> when populated; <strong>Empty</strong> otherwise</td>
+<td>No</td>
+<td>Recent form can appear</td>
+<td>Tiny empty envelope on other matches</td>
+<td>Always return last-N results, or <code>{ available: false }</code></td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/statistics</code></td>
+<td>Match statistics object</td>
+<td><strong>Works</strong></td>
+<td>No</td>
+<td>Strong payload on a covered match</td>
+<td>Uncovered matches return almost nothing. Empty stats ≠ 0% possession</td>
+<td>Keep the shape stable. Never fake zeros</td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/team-streaks</code></td>
+<td>Streak / H2H summary</td>
+<td><strong>Works</strong> when covered; <strong>Not available</strong> (404) otherwise</td>
+<td>No</td>
+<td>General and head-to-head windows on a covered match</td>
+<td>404 on uncovered matches</td>
+<td>200 empty. Document the window</td>
+</tr>
+<tr>
+<td><code>/event/{eventId}/weather</code></td>
+<td>Weather object</td>
+<td><strong>Empty</strong></td>
+<td>No</td>
+<td>Envelope only (<code>conditions</code>)</td>
+<td>Cannot tell “not provided” from “clear conditions”</td>
+<td>Coverage flag. Do not ship a weather tab on an empty object</td>
+</tr>
+</tbody>
+</table>
+<h3 id="player-and-manager">Player and manager</h3>
+<table class="cols-7">
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Data type</th>
+<th>Result</th>
+<th>Pagination</th>
+<th>Proper data?</th>
+<th>Missing / issues</th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/player/{playerId}</code></td>
+<td>Player object (<code>player</code>)</td>
+<td><strong>Partial</strong></td>
+<td>No</td>
+<td>Name and enough to open a profile</td>
+<td>Country and date of birth often missing. Photo / height / shirt are not guaranteed</td>
+<td>Fill the career card. Missing fields stay missing in the UI — do not invent them</td>
+</tr>
+<tr>
+<td><code>/player/{playerId}/events/{direction}</code></td>
+<td>Paginated match list (<code>events</code>)</td>
+<td><strong>Works</strong></td>
+<td>Yes. <code>last</code> / <code>next</code> only</td>
+<td>Recent list is large and usable. Upcoming can be a short list</td>
+<td>Upcoming rows have no score (fair). Invalid direction → 400. No player-level figures on the row</td>
+<td>Do not put the player’s own match figures on these rows unless documented</td>
+</tr>
+<tr>
+<td><code>/player/{playerId}/unique-tournament/{tournamentId}/season/{seasonId}/statistics</code></td>
+<td>Season statistics object</td>
+<td><strong>Works</strong> or <strong>Not available</strong></td>
+<td>No</td>
+<td>Returns player / team / statistics when the file exists</td>
+<td>404 even when the player, league, and season look related. Clients have to guess the triple</td>
+<td>A player-level stats index. 200 empty when not on file</td>
+</tr>
+<tr>
+<td><code>/manager/{managerId}</code></td>
+<td>Manager object</td>
+<td><strong>Not available</strong></td>
+<td>No</td>
+<td>—</td>
+<td>Lineups and match detail did not emit a manager id we could resolve</td>
+<td>Emit manager id from lineup / team. Only then is this route useful</td>
+</tr>
+</tbody>
+</table>
+<h3 id="team">Team</h3>
+<p>This is the strongest family in the catalogue.</p>
+<table class="cols-7">
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Data type</th>
+<th>Result</th>
+<th>Pagination</th>
+<th>Proper data?</th>
+<th>Missing / issues</th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/team/{teamId}</code></td>
+<td>Team object (<code>team</code>)</td>
+<td><strong>Partial</strong></td>
+<td>No</td>
+<td>Name and profile header</td>
+<td>Logo missing on the profile (images live on <code>/media</code>)</td>
+<td>Put crest on the team object</td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/players</code></td>
+<td>Squad list (<code>players</code>)</td>
+<td><strong>Works</strong></td>
+<td><strong>No</strong> — one large dump</td>
+<td>Full squad. Positions exist so you can group GK / DF / MF / FW</td>
+<td>Player id/name sit nested, not always on the top row</td>
+<td>Paginate or document “full dump.” Keep <code>position</code> populated</td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/events/{direction}</code></td>
+<td>Paginated match list (<code>events</code>)</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Previous and upcoming lists are real</td>
+<td>Upcoming rows have no score</td>
+<td>Same list-score improvement as <code>/events</code></td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/featured-event</code></td>
+<td>Match object</td>
+<td><strong>Works</strong></td>
+<td>No</td>
+<td>Returns a match</td>
+<td>Meaning is unclear — not “currently live”</td>
+<td>Document as editorial. Prefer <code>/near-events</code> for “what’s next”</td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/near-events</code></td>
+<td>Previous / next match</td>
+<td><strong>Works</strong></td>
+<td>No</td>
+<td>Clear <code>previousEvent</code> / <code>nextEvent</code></td>
+<td>—</td>
+<td>Keep this as the “what’s next” API</td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/performance</code></td>
+<td>Form list + points</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Recent form window</td>
+<td>Ranking / competition scope is not obvious</td>
+<td>Document the window and competition</td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/rankings</code></td>
+<td>Paginated rankings</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Ranking rows exist</td>
+<td>Context (which ranking list?) is unclear</td>
+<td>Name the ranking and the date</td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/unique-tournaments</code></td>
+<td>Paginated competitions</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Needed to discover <code>tournamentId</code> for later stats</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/standings-seasons</code></td>
+<td>Paginated season links</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Use this instead of guessing season ids</td>
+<td>Two keys (<code>uniqueTournamentSeasons</code>, <code>tournamentSeasons</code>)</td>
+<td>Prefer one list key</td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/unique-tournament/{tournamentId}/season/{seasonId}/statistics</code></td>
+<td>Season statistics object</td>
+<td><strong>Works</strong> when the triple matches; <strong>Not available</strong> otherwise</td>
+<td>No</td>
+<td>Usable when the team actually plays that competition/season</td>
+<td>404 if you pair a random team with a random league</td>
+<td>200 empty, or publish which triples exist</td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/media</code></td>
+<td>Paginated media</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Crest / images</td>
+<td>Profile still has no logo field</td>
+<td>Reuse these URLs on <code>/team/{id}</code></td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/enrichments</code></td>
+<td>Type list</td>
+<td><strong>Works</strong></td>
+<td>Not paged</td>
+<td>Types are listed (unlike many match enrichment indexes)</td>
+<td>—</td>
+<td>Keep match-side enrichments this consistent</td>
+</tr>
+<tr>
+<td><code>/team/{teamId}/enrichments/{type}</code></td>
+<td>Typed extra (often an event list)</td>
+<td><strong>Works</strong></td>
+<td>Yes for event-shaped types</td>
+<td>Real payload for a listed type</td>
+<td>Shape changes by type</td>
+<td>Document each type</td>
+</tr>
+</tbody>
+</table>
+<h3 id="competition">Competition</h3>
+<table class="cols-7">
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Data type</th>
+<th>Result</th>
+<th>Pagination</th>
+<th>Proper data?</th>
+<th>Missing / issues</th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/unique-tournament/{tournamentId}</code></td>
+<td>Competition object</td>
+<td><strong>Partial</strong></td>
+<td>No</td>
+<td>Name and overview</td>
+<td><code>currentSeasonId</code> can be missing — you must call <code>/seasons</code></td>
+<td>Always emit current season</td>
+</tr>
+<tr>
+<td><code>/unique-tournament/{tournamentId}/events</code></td>
+<td>Paginated match list (<code>events</code>)</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Large, usable fixture/result list</td>
+<td>Can include old seasons if not filtered</td>
+<td>Document default season</td>
+</tr>
+<tr>
+<td><code>/unique-tournament/{tournamentId}/scheduled-events/{date}</code></td>
+<td>Paginated match list</td>
+<td><strong>Empty</strong> on a quiet day; <strong>Expected</strong> 400 on a bad date</td>
+<td>Yes</td>
+<td>Empty day is valid. Bad date is clearly <code>YYYY-MM-DD</code></td>
+<td>Empty day vs “this league is not covered that day” is still ambiguous</td>
+<td>Coverage flag on empty days</td>
+</tr>
+<tr>
+<td><code>/unique-tournament/{tournamentId}/seasons</code></td>
+<td>Paginated seasons</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Source of truth for season ids</td>
+<td>—</td>
+<td>Never hardcode seasons</td>
+</tr>
+<tr>
+<td><code>/unique-tournament/{tournamentId}/season/{seasonId}/round/{round}</code></td>
+<td>Paginated matchday list</td>
+<td><strong>Works</strong></td>
+<td>Yes</td>
+<td>Round 1 returned a full match list</td>
+<td>Whether <code>round</code> is a number, a name, or both is not documented</td>
+<td>Document round identity</td>
+</tr>
+<tr>
+<td><code>/unique-tournament/{tournamentId}/season/{seasonId}/standings/{type}</code></td>
+<td>Standings groups</td>
+<td><strong>Works</strong></td>
+<td>Not paged as a list of pages</td>
+<td><code>total</code>, <code>home</code>, and <code>away</code> all returned tables on a major league</td>
+<td>Cup competitions will not look like a league table. Goal difference is not guaranteed</td>
+<td>Do not force GD / home / away columns. Document <code>type</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-what-a-football-product-can-ship-today">7. What a football product can ship today</h2>
+<table class="cols-3">
+<thead>
+<tr>
+<th>Need</th>
+<th>Ready?</th>
+<th>What we saw in the product and in testing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Today’s matches</td>
+<td>Yes</td>
+<td><code>/fixtures/today</code> works as a schedule</td>
+</tr>
+<tr>
+<td>Live scores on the home card</td>
+<td>Partial</td>
+<td>Live filter works. The list often has no score. Home did N+1 detail calls</td>
+</tr>
+<tr>
+<td>Match timeline</td>
+<td>Yes, on covered matches</td>
+<td>Incidents are paginated — read every page</td>
+</tr>
+<tr>
+<td>Match statistics</td>
+<td>Yes, on covered matches</td>
+<td>Strong payload. Do not hardcode metrics. Do not fake 0%</td>
+</tr>
+<tr>
+<td>Lineups</td>
+<td>Partial</td>
+<td>Real XI on some finished matches. Empty shell on others. Formation / manager often missing</td>
+</tr>
+<tr>
+<td>Injuries / weather / H2H</td>
+<td>Weak</td>
+<td>Empty 200 or a thin envelope. Do not claim “none”</td>
+</tr>
+<tr>
+<td>Best players / streaks</td>
+<td>Coverage-dependent</td>
+<td>200 on a covered match, 404 on others</td>
+</tr>
+<tr>
+<td>Team squad and match lists</td>
+<td>Yes</td>
+<td>Strongest part of the API</td>
+</tr>
+<tr>
+<td>League table</td>
+<td>Yes</td>
+<td><code>standings/total</code> is usable. Home / away worked on a major league</td>
+</tr>
+<tr>
+<td>Search</td>
+<td>Partial</td>
+<td>Real names work. Typos do not. <code>q</code> is required</td>
+</tr>
+<tr>
+<td>Manager page</td>
+<td>No</td>
+<td>No reliable id from lineup / match, and the route 404s without one</td>
+</tr>
+<tr>
+<td>Player season stats</td>
+<td>Partial</td>
+<td>Works for some triples, 404 for others that look valid</td>
+</tr>
+<tr>
+<td>Odds / news / predictions</td>
+<td>Unknown</td>
+<td>Enrichment types are empty on some matches. Do not assume they exist</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-what-is-missing-and-what-to-improve">8. What is missing, and what to improve</h2>
+<p>Highest value first.</p>
+<ol>
+<li><strong>Scores on list rows.</strong> <code>/fixtures/today</code> and <code>/events</code> should include score, minute, and competition. That removes N+1 detail calls on Home.</li>
+<li><strong>One event schema.</strong> Status object and ISO kickoff on both list and detail. Always emit tournament id with the name so Match → Competition works.</li>
+<li><strong>Optional extras must not 404.</strong> Best players, streaks, enrichment types, player-in-match stats, missing season stats: return 200 empty with a reason. 404 is for “this match does not exist.”</li>
+<li><strong>Empty vs unsupported.</strong> Weather, injuries, lineups, form, H2H, scheduled-events: add an explicit coverage flag. An empty 200 is currently ambiguous.</li>
+<li><strong>Lineups that can draw an XI.</strong> Starters, bench, shirts, positions, formation, coach, confirmed vs expected — on every covered match, and an honest empty state otherwise.</li>
+<li><strong>One list key, or document them.</strong> <code>items</code> vs <code>events</code> vs <code>players</code> vs <code>playerStatistics</code> vs <code>incidents</code>. Paginate or document the squad dump. Incidents default page is too small for a full timeline.</li>
+<li><strong>Search quality.</strong> Aliases and misspellings are part of a football product.</li>
+<li><strong>Manager id on the lineup.</strong> Without it, <code>/manager/{id}</code> is a dead route.</li>
+<li><strong>Do not 404 season statistics</strong> for a valid player or team that simply has no file for that tournament/season. Publish which triples exist, or return coverage.</li>
+<li><strong>Document ranking / “best” / featured-event.</strong> If the API cannot say what the field means, the UI must not guess.</li>
+<li><strong>Crest on the team object.</strong> Images already exist on <code>/media</code>.</li>
+<li><strong>Current season on the competition object.</strong> Clients should not have to call <code>/seasons</code> just to know which table to load.</li>
+</ol>
+<hr />
+<p>The Football API is good enough to start a product. Search, teams, competitions, standings, match detail, incidents, and statistics are shippable. A complete match centre still depends on coverage, and several extras still fail as 404 or empty 200 instead of a clear “not on this match.” The screens we built only render what the API gave us.</p>
+    <p class="footer-note">Product assessment from live REST calls against the Football catalogue and a working Football Lab product.</p>
+  </article>
+</body>
+</html>

@@ -9,12 +9,18 @@ export function ReportPage() {
     getJson("/admin/football/report").then(setReport);
   }, []);
 
-  function download(kind: "json" | "csv") {
-    const href = kind === "json" ? "/admin/football/report" : "/admin/football/report.csv";
+  async function download(kind: "json" | "csv") {
+    const payload =
+      kind === "json"
+        ? JSON.stringify(report ?? (await getJson("/admin/football/report")), null, 2)
+        : await getJson<string>("/admin/football/report.csv");
+    const blob = new Blob([payload], { type: kind === "json" ? "application/json" : "text/csv" });
+    const href = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = href;
     a.download = kind === "json" ? "football-api-report.json" : "football-api-report.csv";
     a.click();
+    URL.revokeObjectURL(href);
   }
 
   async function copySummary() {

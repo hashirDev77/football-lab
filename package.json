@@ -1,16 +1,28 @@
 {
-  "name": "football-product",
+  "name": "football-lab",
   "private": true,
-  "description": "Football Product Experience & API Gap Lab",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Football product frontend for the deployed SportsAPI365 Football API",
   "scripts": {
-    "dev": "pnpm --parallel --filter @football/api --filter @football/web dev",
-    "dev:api": "pnpm --filter @football/api dev",
-    "dev:web": "pnpm --filter @football/web dev",
-    "audit:phase1": "pnpm --filter @football/api audit:phase1",
-    "report": "pnpm --filter @football/api exec tsx src/audit/writeReport.ts"
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.2"
   },
   "pnpm": {
     "onlyBuiltDependencies": ["esbuild"]

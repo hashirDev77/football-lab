@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/msdata/:path*",
+      "destination": "https://sports-api.sportsdata365.com/msdata/:path*"
+    },
+    {
+      "source": "/((?!assets/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

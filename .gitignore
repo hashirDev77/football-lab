@@ -1,11 +1,5 @@
 node_modules
 dist
 .env
-data/gaps.json
-data/calls.json
-data/phase1-audit.json
-data/findings.json
 .DS_Store
 *.log
-apps/web/dist
-apps/api/dist

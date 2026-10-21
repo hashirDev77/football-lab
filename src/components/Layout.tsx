@@ -33,7 +33,7 @@ export function Layout() {
         <Outlet />
       </main>
       <footer className="footer">
-        SportsAPI365 football · product screens consume /app/football · gaps recorded on every provider call
+        SportsAPI365 football · product screens consume the deployed Football API
       </footer>
     </div>
   );

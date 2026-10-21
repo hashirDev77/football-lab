@@ -1,11 +1,15 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
-import { config } from "../config.js";
-import type { CallLog, GapRecord, ManualFinding, RelationshipCheck } from "./types.js";
+import type { CallLog, GapRecord, ManualFinding, RelationshipCheck } from "./types";
 
-function loadJson<T>(file: string, fallback: T): T {
+const STORAGE_KEYS = {
+  calls: "football-lab-calls",
+  gaps: "football-lab-gaps",
+  findings: "football-lab-findings",
+} as const;
+
+function loadJson<T>(key: string, fallback: T): T {
   try {
-    return JSON.parse(readFileSync(file, "utf8")) as T;
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
     return fallback;
   }
@@ -17,13 +21,12 @@ class GapStore {
   findings: ManualFinding[] = [];
   relationships: RelationshipCheck[] = [];
   schemaNotes: Array<{ endpoint: string; field: string; observed: string; canonical: string }> = [];
-  private persistTimer: NodeJS.Timeout | null = null;
+  private persistTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
-    mkdirSync(config.dataDir, { recursive: true });
-    this.calls = loadJson(join(config.dataDir, "calls.json"), []);
-    this.gaps = loadJson(join(config.dataDir, "gaps.json"), []);
-    this.findings = loadJson(join(config.dataDir, "findings.json"), []);
+    this.calls = loadJson(STORAGE_KEYS.calls, []);
+    this.gaps = loadJson(STORAGE_KEYS.gaps, []);
+    this.findings = loadJson(STORAGE_KEYS.findings, []);
   }
 
   addCall(call: CallLog) {
@@ -74,20 +77,19 @@ class GapStore {
     return this.gaps.filter((gap) => gap.endpoint.includes(endpoint));
   }
 
-  byFamily(family: string) {
-    return this.calls.filter((call) => call.endpoint.includes(`/${family}`) || call.endpoint.includes(family));
-  }
-
   private queuePersist() {
     if (this.persistTimer) clearTimeout(this.persistTimer);
     this.persistTimer = setTimeout(() => this.persist(), 400);
   }
 
   persist() {
-    mkdirSync(config.dataDir, { recursive: true });
-    writeFileSync(join(config.dataDir, "gaps.json"), JSON.stringify(this.gaps, null, 2));
-    writeFileSync(join(config.dataDir, "calls.json"), JSON.stringify(this.calls.slice(-2000), null, 2));
-    writeFileSync(join(config.dataDir, "findings.json"), JSON.stringify(this.findings, null, 2));
+    try {
+      localStorage.setItem(STORAGE_KEYS.gaps, JSON.stringify(this.gaps));
+      localStorage.setItem(STORAGE_KEYS.calls, JSON.stringify(this.calls.slice(-2000)));
+      localStorage.setItem(STORAGE_KEYS.findings, JSON.stringify(this.findings));
+    } catch {
+      // Ignore quota / private-mode failures.
+    }
   }
 }
 

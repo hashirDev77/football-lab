@@ -21,7 +21,7 @@ export class FootballClient {
     hook?: CallHook,
     headerOpts?: { apim?: boolean; live?: boolean },
   ): Promise<ProviderResult> {
-    const url = new URL(footballUrl(endpoint));
+    const url = new URL(footballUrl(endpoint), typeof window === "undefined" ? "http://localhost" : window.location.origin);
     if (params) {
       for (const [key, value] of Object.entries(params)) {
         if (value !== undefined && value !== "") url.searchParams.set(key, String(value));
@@ -41,7 +41,7 @@ export class FootballClient {
       });
       status = response.status;
       const text = await response.text();
-      bytes = Buffer.byteLength(text);
+      bytes = new TextEncoder().encode(text).length;
       const contentType = response.headers.get("content-type") || "";
       if (contentType.includes("application/json") && text) {
         try {

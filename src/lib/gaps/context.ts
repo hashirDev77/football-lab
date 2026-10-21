@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import { SLOW_MS, type CallHook } from "../raw/client.js";
 import { isOptionalEnrichment404 } from "../raw/unwrap.js";
 import type { ProviderResult } from "../raw/types.js";
@@ -20,7 +19,7 @@ export class RequestContext {
 
   handleCall(result: ProviderResult, hook?: CallHook) {
     const log: CallLog = {
-      id: randomUUID(),
+      id: crypto.randomUUID(),
       endpoint: result.endpoint,
       params: result.params,
       screen: hook?.screen || this.screen,
@@ -86,7 +85,7 @@ export class RequestContext {
     evidence?: Record<string, unknown>;
   }) {
     const gap: GapRecord = {
-      id: randomUUID(),
+      id: crypto.randomUUID(),
       screen: this.screen,
       component: partial.component || this.component,
       timestamp: new Date().toISOString(),
